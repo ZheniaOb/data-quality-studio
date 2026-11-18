@@ -1,0 +1,21 @@
+time,operation,params,rows_before,rows_after,affected
+2026-11-18T12:36:25,usunięcie duplikatów,klucz=pełny wiersz,2030,2000,30
+2026-11-18T12:36:25,zakres: nan,"kolumna=longitude, [-124.5, -114.0]",2000,2000,0
+2026-11-18T12:36:25,zakres: nan,"kolumna=latitude, [32.5, 42.0]",2000,2000,6
+2026-11-18T12:36:25,zakres: nan,"kolumna=housing_median_age, [1, 52]",2000,2000,13
+2026-11-18T12:36:25,zakres: nan,"kolumna=total_rooms, [1, inf]",2000,2000,0
+2026-11-18T12:36:25,zakres: nan,"kolumna=total_bedrooms, [0, inf]",2000,2000,0
+2026-11-18T12:36:25,zakres: nan,"kolumna=population, [1, inf]",2000,2000,0
+2026-11-18T12:36:25,zakres: nan,"kolumna=households, [1, inf]",2000,2000,0
+2026-11-18T12:36:25,zakres: nan,"kolumna=median_income, [0.4999, 15.0001]",2000,2000,4
+2026-11-18T12:36:25,zakres: nan,"kolumna=median_house_value, [14999, 500001]",2000,2000,0
+2026-11-18T12:36:25,braki: median,"kolumna=latitude, wartość=37.39",2000,2000,6
+2026-11-18T12:36:25,braki: median,"kolumna=housing_median_age, wartość=27.0",2000,2000,13
+2026-11-18T12:36:25,braki: median,"kolumna=total_bedrooms, wartość=810.0",2000,2000,60
+2026-11-18T12:36:25,braki: median,"kolumna=median_income, wartość=3.72705",2000,2000,44
+2026-11-18T12:36:25,braki: mode,"kolumna=ocean_proximity, wartość=<1H OCEAN",2000,2000,40
+2026-11-18T12:36:25,outliery: flag,"kolumna=total_rooms, IQR×1.5, granice=[-3749, 1.211e+04]",2000,2000,0
+2026-11-18T12:36:25,outliery: flag,"kolumna=total_bedrooms, IQR×1.5, granice=[-691.5, 2336]",2000,2000,3
+2026-11-18T12:36:25,outliery: flag,"kolumna=population, IQR×1.5, granice=[-1973, 6502]",2000,2000,10
+2026-11-18T12:36:25,outliery: flag,"kolumna=households, IQR×1.5, granice=[-695.9, 2245]",2000,2000,0
+2026-11-18T12:36:25,outliery: flag,"kolumna=median_income, IQR×1.5, granice=[-1.029, 8.77]",2000,2000,53
