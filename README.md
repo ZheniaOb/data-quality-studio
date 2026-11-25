@@ -2,7 +2,10 @@
 
 Projekt 2 z Programowania V. Aplikacja prowadzi od wczytania CSV, przez diagnozę i czyszczenie danych, do wizualizacji i eksportu.
 
-**Stan:** Lab 6 gotowy (profil danych, reguły jakości, pipeline czyszczenia, raport przed/po, `cleaned.csv`). Lab 7–9 (wykresy, GUI, eksport) w przygotowaniu.
+**Stan:**
+- Lab 6 gotowy: profil danych, reguły jakości, pipeline czyszczenia, raport przed/po, `cleaned.csv`.
+- Lab 7 gotowy: cztery typy wykresów przed/po, walidacja typów kolumn, korelacja z interpretacją, eksport PNG/SVG/PDF.
+- Lab 8–9 (GUI, osadzenie wykresu) w przygotowaniu.
 
 ## Instalacja
 
@@ -18,7 +21,8 @@ pip install -r requirements.txt
 python data/make_sample.py                  # syntetyczny brudny zbiór -> data/housing_dirty.csv
 python lab6_clean.py data/housing_dirty.csv # -> output/cleaned.csv, output/report.md, output/audit_log.csv
 python lab6_clean.py <plik.csv> --missing drop --out output_drop
-python -m pytest                            # testy logiki
+python lab7_plots.py data/housing_dirty.csv # -> output/plots/*.png|svg, correlation_*.png, correlation.md
+python -m pytest                            # testy logiki i wykresów
 ```
 
 Gdy prowadząca udostępni referencyjny zbiór California Housing, wystarczy podać jego ścieżkę zamiast `data/housing_dirty.csv`.
@@ -28,7 +32,9 @@ Gdy prowadząca udostępni referencyjny zbiór California Housing, wystarczy pod
 | Plik | Rola |
 |---|---|
 | `studio/session.py` | `DataSession`: dane surowe (`raw`, nigdy nie zmieniane), bieżące (`current`) i dziennik operacji. Bez zależności od GUI. |
+| `studio/plots.py` | Wykresy zwracające `Figure` (bez pyplot): `build_figure(frame, kind, x, y, hue)`, `compare_figure` (przed/po), korelacja, `save_figure`. Walidacja typów kolumn. |
 | `lab6_clean.py` | Skrypt Lab 6: reguły dla California Housing, pipeline, raport. |
+| `lab7_plots.py` | Skrypt Lab 7: zestaw wykresów przed/po i raport korelacji. |
 | `data/make_sample.py` | Generator syntetycznych danych z celowymi błędami (ziarno 42). |
 | `data/samples/` | Małe pliki testowe: przecinek, średnik, wadliwy wiersz. |
 | `tests/test_session.py` | Testy na małych, ręcznie kontrolowanych DataFrame. |
@@ -43,6 +49,17 @@ Kolejność pipeline'u: **duplikaty → wartości błędne → braki → outlier
 4. **Outliery** – metoda IQR (poza `[Q1 − 1.5·IQR, Q3 + 1.5·IQR]`). Są tylko **oznaczane** kolumną `<kolumna>_outlier`, nie usuwane: duża populacja czy wysoki dochód to zwykle prawdziwe dzielnice, a nie błędy. Przycinanie (`clip`) i usuwanie (`drop`) są dostępne, ale wymagają jawnej decyzji. Dla kolumny stałej (IQR = 0) nic nie jest oznaczane.
 
 Każda operacja zapisuje w dzienniku czas, parametry, liczbę rekordów przed/po oraz liczbę rekordów/komórek, których dotyczyła. `reset()` przywraca dane surowe bez restartu programu. Wynik jest powtarzalny: pipeline jest deterministyczny (sprawdza to test).
+
+## Wykresy (Lab 7)
+
+| Typ | Parametry | Walidacja |
+|---|---|---|
+| histogram | `x` liczbowa | blokuje kolumnę tekstową, logiczną, pustą i stałą |
+| scatter | `x`, `y` liczbowe (różne), `hue` kategoria | jak wyżej + r Pearsona w tytule |
+| box | `x` liczbowa, `hue` opcjonalne grupowanie | wąsy = 1.5·IQR, ta sama reguła co outliery w Lab 6 |
+| bar | `x` kategoria (≤ 30 wartości), `y` liczbowa → średnia, brak `y` → liczność | blokuje kolumny o zbyt wielu wartościach |
+
+Każdy wykres ma tytuł i opisy osi. Niepoprawny wybór zgłasza `ValueError` z podpowiedzią (w GUI będzie to komunikat). Interpretacja korelacji (w tym zastrzeżenie, że korelacja ≠ przyczynowość) jest w `output/plots/correlation.md`.
 
 ## Znane ograniczenia
 
